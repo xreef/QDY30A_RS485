@@ -1,3 +1,18 @@
+/**
+ * QDY30A_RS485.cpp
+ *
+ * Implementation of the QDY30A_RS485 library, facilitating communication with the QDY30A level
+ * transmitter over RS485 using the Modbus RTU protocol. This library allows for configuration
+ * and reading of fluid levels with precision, supporting a wide range of microcontroller platforms.
+ *
+ * Features include setting measurement units, precision, and reading fluid levels with
+ * adjusted precision. The library is designed with flexibility in mind, supporting both
+ * hardware and software serial connections.
+ *
+ * Author: Renzo Mischianti <renzo.mischianti@gmail.com>
+ * Website: https://www.mischianti.org
+ */
+ 
 #include "QDY30A_RS485.h"
 
 void managedDelay(unsigned long timeout) {
