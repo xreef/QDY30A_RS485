@@ -1,5 +1,5 @@
-#ifndef QDY30A_rs485_h
-#define QDY30A_rs485_h
+#ifndef QDY30A_RS485_h
+#define QDY30A_RS485_h
 
 #include "Arduino.h"
 #if !defined(ARDUINO_ARCH_STM32) && !defined(ESP32) && !defined(ARDUINO_ARCH_SAMD) && !defined(ARDUINO_ARCH_MBED) && !defined(__STM32F1__) && !defined(__STM32F4__)
@@ -13,13 +13,13 @@
 	#include <SoftwareSerial.h>
 #endif
 // Uncomment to enable printing out nice debug messages.
-//#define QDY30A_rs485_DEBUG
+//#define QDY30A_RS485_DEBUG
 
 // Define where debug output will be printed.
 #define DEBUG_PRINTER Serial
 
 // Setup debug printing macros.
-#ifdef QDY30A_rs485_DEBUG
+#ifdef QDY30A_RS485_DEBUG
 	#define DEBUG_PRINT(...) { DEBUG_PRINTER.print(__VA_ARGS__); }
 	#define DEBUG_PRINTLN(...) { DEBUG_PRINTER.println(__VA_ARGS__); }
 #else
@@ -75,11 +75,11 @@ enum Precision {
 #define DE_RE_WRITE   HIGH
 
 
-class QDY30A_rs485 {
+class QDY30A_RS485 {
   public:
-    QDY30A_rs485(HardwareSerial* serial, uint8_t deRePin, uint8_t address = 0x01);
+    QDY30A_RS485(HardwareSerial* serial, uint8_t deRePin, uint8_t address = 0x01);
 #ifdef HARDWARE_SERIAL_SELECTABLE_PIN
-    QDY30A_rs485(uint8_t rxMCUPin, uint8_t txMCUPin, HardwareSerial* serial, uint8_t deRePin, uint8_t address = 0x01);
+    QDY30A_RS485(uint8_t rxMCUPin, uint8_t txMCUPin, HardwareSerial* serial, uint8_t deRePin, uint8_t address = 0x01);
 #endif
     void begin(uint32_t baudRate = 9600);
     uint16_t readRegister(uint16_t regAddr);
