@@ -13,6 +13,31 @@ void managedDelay(unsigned long timeout) {
 
 }
 
+#ifdef ACTIVATE_SOFTWARE_SERIAL
+	QDY30A_RS485::QDY30A_RS485(SoftwareSerial* serial, uint8_t deRePin, uint8_t address) {
+		this->ss = serial;
+
+		this->hs = NULL;
+
+		this->dePin = deRePin;
+
+		this->address = address;
+	}
+	QDY30A_RS485::QDY30A_RS485(uint8_t rxMCUPin, uint8_t txMCUPin, uint8_t deRePin, uint8_t address) {
+		this->ss = NULL;
+
+		this->hs = NULL;
+
+		this->dePin = deRePin;
+
+		this->txMCUPin = txMCUPin;
+		this->rxMCUPin = rxMCUPin;
+
+		this->address = address;
+	}
+
+#endif
+
 QDY30A_RS485::QDY30A_RS485(HardwareSerial* serial, uint8_t deRePin, uint8_t address) {
 	#ifdef ACTIVATE_SOFTWARE_SERIAL
 		this->ss = NULL;
@@ -25,20 +50,20 @@ QDY30A_RS485::QDY30A_RS485(HardwareSerial* serial, uint8_t deRePin, uint8_t addr
 	this->address = address;
 }
 #ifdef HARDWARE_SERIAL_SELECTABLE_PIN
-QDY30A_RS485::QDY30A_RS485(uint8_t rxMCUPin, uint8_t txMCUPin, HardwareSerial* serial, uint8_t deRePin, uint8_t address) {
-	#ifdef ACTIVATE_SOFTWARE_SERIAL
-		this->ss = NULL;
-	#endif
+	QDY30A_RS485::QDY30A_RS485(uint8_t rxMCUPin, uint8_t txMCUPin, HardwareSerial* serial, uint8_t deRePin, uint8_t address) {
+		#ifdef ACTIVATE_SOFTWARE_SERIAL
+			this->ss = NULL;
+		#endif
 
-	this->hs = serial;
+		this->hs = serial;
 
-	this->dePin = deRePin;
+		this->dePin = deRePin;
 
-	this->txMCUPin = txMCUPin;
-	this->rxMCUPin = rxMCUPin;
+		this->txMCUPin = txMCUPin;
+		this->rxMCUPin = rxMCUPin;
 
-	this->address = address;
-}
+		this->address = address;
+	}
 #endif
 
 void QDY30A_RS485::begin(uint32_t baudRate) {
@@ -84,7 +109,9 @@ void QDY30A_RS485::begin(uint32_t baudRate) {
 
     this->serialDef.stream->setTimeout(1000);
 
+    managedDelay(5);
     setLocalPrecisionFromSetting();
+    managedDelay(5);
 }
 
 uint16_t QDY30A_RS485::crc16_modbus(uint8_t *data, uint16_t length) {

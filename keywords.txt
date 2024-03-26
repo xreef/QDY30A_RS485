@@ -1,21 +1,39 @@
 ###########################################
-# Syntax Coloring Map For PCF8591-library
+# Syntax Coloring Map For QDY30A_RS485
 ###########################################
 
 ###########################################
 # Datatypes (KEYWORD1)
 ###########################################
 
-PCF8591	KEYWORD1
+QDY30A_RS485    KEYWORD1
 
 ###########################################
 # Methods and Functions (KEYWORD2)
 ###########################################
 
-begin	KEYWORD2
-AnalogInput	KEYWORD2
-analogRead	KEYWORD2
-analogWrite	KEYWORD2
-
-voltageWrite	KEYWORD2
-voltageRead	KEYWORD2
+begin   KEYWORD2
+readRegister    KEYWORD2
+writeRegister   KEYWORD2
+getErrorDescription KEYWORD2
+getUnitDescription  KEYWORD2
+getPrecisionDescription KEYWORD2
+getBaudRateDescription  KEYWORD2
+getUnitDescription  KEYWORD2
+getPrecisionDescription KEYWORD2
+setBaudRate KEYWORD2
+setMeasurementUnit  KEYWORD2
+setPrecision    KEYWORD2
+getBaudRate KEYWORD2
+getMeasurementUnit  KEYWORD2
+getPrecision    KEYWORD2
+getOutputValue  KEYWORD2
+getZeroScaleValue   KEYWORD2
+getFullScaleValue   KEYWORD2
+getOutputValueWithPrecision KEYWORD2
+getZeroScaleValueWithPrecision  KEYWORD2
+getFullScaleValueWithPrecision  KEYWORD2
+setSlaveAddress KEYWORD2
+getSlaveAddress KEYWORD2
+setLocalPrecisionFromSetting    KEYWORD2
+setLocalPrecision   KEYWORD2

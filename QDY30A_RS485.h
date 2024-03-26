@@ -1,3 +1,38 @@
+/**
+ * QDY30A_RS485.h - Library Header File
+ *
+ * The QDY30A_RS485 library provides an easy-to-use interface for communicating with
+ * the QDY30A RS485 level transmitter. It simplifies the process of reading fluid levels
+ * and configuring the device over an RS485 connection using the Modbus RTU protocol.
+ * Designed to be compatible with a wide array of microcontrollers that support Serial
+ * communication, including Arduino, ESP8266, ESP32, STM32, and Raspberry Pi Pico.
+ *
+ * This library allows users to quickly integrate the QDY30A level transmitter into their
+ * projects, providing functions to read fluid levels with precision, set and get device
+ * configuration such as measurement units and precision, and handle communication
+ * errors gracefully.
+ *
+ * Key Features:
+ * - Easy configuration and reading of the QDY30A level transmitter
+ * - Support for Modbus RTU protocol over RS485
+ * - Compatible with Arduino and other microcontrollers with Serial support
+ * - Functions to set measurement units and data precision
+ * - Utility functions for error handling and converting enumerations to descriptive text
+ *
+ * Version: 1.0.0
+ * Author: Renzo Mischianti <renzo.mischianti@gmail.com>
+ * Website: https://www.mischianti.org
+ *
+ * The development of this library was inspired by the need for a straightforward way to
+ * interface with the QDY30A transmitter in various IoT and automation projects, focusing
+ * on ease of use and reliability.
+ *
+ * License: MIT
+ *
+ * For more information, examples, and API documentation, visit the GitHub repository:
+ * https://github.com/xreef/QDY30A_RS485
+ */
+
 #ifndef QDY30A_RS485_h
 #define QDY30A_RS485_h
 
@@ -78,6 +113,11 @@ enum Precision {
 class QDY30A_RS485 {
   public:
     QDY30A_RS485(HardwareSerial* serial, uint8_t deRePin, uint8_t address = 0x01);
+#ifdef ACTIVATE_SOFTWARE_SERIAL
+    QDY30A_RS485(SoftwareSerial* serial, uint8_t deRePin, uint8_t address = 0x01);
+    QDY30A_RS485(uint8_t rxMCUPin, uint8_t txMCUPin, uint8_t deRePin, uint8_t address = 0x01);
+#endif
+
 #ifdef HARDWARE_SERIAL_SELECTABLE_PIN
     QDY30A_RS485(uint8_t rxMCUPin, uint8_t txMCUPin, HardwareSerial* serial, uint8_t deRePin, uint8_t address = 0x01);
 #endif
