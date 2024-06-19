@@ -15,7 +15,7 @@
  
 #include "QDY30A_RS485.h"
 
-void managedDelay(unsigned long timeout) {
+void QDY30A_RS485::managedDelay(unsigned long timeout) {
 
 	unsigned long t = millis();
 
@@ -144,7 +144,7 @@ uint16_t QDY30A_RS485::crc16_modbus(uint8_t *data, uint16_t length) {
   }
   return crc;
 }
-void writeHex(int n) {
+void QDY30A_RS485::writeHex(int n) {
 	DEBUG_PRINT("0x");
 	DEBUG_PRINT(n < 16 ? "0" : "");
 	DEBUG_PRINT(n, HEX);
@@ -190,6 +190,28 @@ bool QDY30A_RS485::readResponse(uint8_t *response, uint8_t responseSize) {
             response[bytesRead++] = (uint8_t)this->serialDef.stream->read();
         }
     }
+
+//    while ((millis() - startTime) < 2000 && bytesRead < responseSize) {
+//
+//    	while (this->serialDef.stream->available()) {
+//    		uint8_t byteReaded = (uint8_t)this->serialDef.stream->read();
+//    	      DEBUG_PRINT(byteReaded, HEX);
+//    	      DEBUG_PRINT(" ");
+//    	      DEBUG_PRINTLN(0x01, HEX);
+//
+//
+//    		if (byteReaded == 0x01) {
+//    			startRead = true;
+//    			DEBUG_PRINT("FOUND!");
+//    		}
+//    		if (startRead) {
+//    			response[bytesRead++] = byteReaded;
+//    		}
+//    //		delay(2); // Short delay to allow bytes to accumulate in the buffer
+////    		managedDelay(3);
+//    	}
+////
+
 
     for (int i = 0 ; i <= 6 ; i++) {
       DEBUG_PRINT("[");
@@ -313,33 +335,33 @@ void QDY30A_RS485::setSlaveAddress(uint8_t newAddress) {
     writeRegister(REG_STATUS_ADDRESS, newAddress);
 }
 
-void QDY30A_RS485::setBaudRate(BaudRate baudRate) {
+void QDY30A_RS485::setBaudRate(BaudRate_QDY30A baudRate) {
     writeRegister(REG_STATUS_BAUDRATE, static_cast<uint16_t>(baudRate));
 }
 
-void QDY30A_RS485::setMeasurementUnit(MeasurementUnit unit) {
+void QDY30A_RS485::setMeasurementUnit(MeasurementUnit_QDY30A unit) {
     writeRegister(REG_STATUS_UNITS, static_cast<uint16_t>(unit));
 }
-void QDY30A_RS485::setPrecision(Precision precision) {
+void QDY30A_RS485::setPrecision(Precision_QDY30A precision) {
     writeRegister(REG_STATUS_PRECISION, static_cast<uint16_t>(precision));
 }
 uint8_t QDY30A_RS485::getSlaveAddress() {
     return static_cast<uint8_t>(readRegister(REG_STATUS_ADDRESS));
 }
 
-BaudRate QDY30A_RS485::getBaudRate() {
+BaudRate_QDY30A QDY30A_RS485::getBaudRate() {
     uint16_t baudRateValue = readRegister(REG_STATUS_BAUDRATE);
-    return static_cast<BaudRate>(baudRateValue);
+    return static_cast<BaudRate_QDY30A>(baudRateValue);
 }
-MeasurementUnit QDY30A_RS485::getMeasurementUnit() {
+MeasurementUnit_QDY30A QDY30A_RS485::getMeasurementUnit() {
     uint16_t unitValue = readRegister(REG_STATUS_UNITS);
-    return static_cast<MeasurementUnit>(unitValue);
+    return static_cast<MeasurementUnit_QDY30A>(unitValue);
 }
-Precision QDY30A_RS485::getPrecision() {
+Precision_QDY30A QDY30A_RS485::getPrecision() {
     uint16_t precisionValue = readRegister(REG_STATUS_PRECISION);
-    return static_cast<Precision>(precisionValue);
+    return static_cast<Precision_QDY30A>(precisionValue);
 }
-String QDY30A_RS485::getUnitDescription(MeasurementUnit unit) {
+String QDY30A_RS485::getUnitDescription(MeasurementUnit_QDY30A unit) {
     switch (unit) {
         case UNIT_NOT_DISPLAYED:
             return "Not displayed";
@@ -359,7 +381,7 @@ String QDY30A_RS485::getUnitDescription(MeasurementUnit unit) {
             return "Unknown unit";
     }
 }
-String QDY30A_RS485::getPrecisionDescription(Precision precision) {
+String QDY30A_RS485::getPrecisionDescription(Precision_QDY30A precision) {
     switch (precision) {
         case PRECISION_NO_DECIMAL:
             return "No decimal";
@@ -373,7 +395,7 @@ String QDY30A_RS485::getPrecisionDescription(Precision precision) {
             return "Unknown precision";
     }
 }
-String QDY30A_RS485::getBaudRateDescription(BaudRate baudRate) {
+String QDY30A_RS485::getBaudRateDescription(BaudRate_QDY30A baudRate) {
     switch (baudRate) {
         case BAUD_1200:
             return "1200 bps";
@@ -410,7 +432,7 @@ int16_t QDY30A_RS485::getZeroScaleValue() {
 int16_t QDY30A_RS485::getFullScaleValue() {
     return static_cast<int16_t>(readRegister(REG_STATUS_FULL));
 }
-float QDY30A_RS485::applyPrecision(int16_t rawValue, Precision precision) {
+float QDY30A_RS485::applyPrecision(int16_t rawValue, Precision_QDY30A precision) {
     float scaleFactor = pow(10, static_cast<double>(precision)); // Precision as a scale factor
     return rawValue / scaleFactor;
 }
@@ -435,11 +457,11 @@ float QDY30A_RS485::getFullScaleValueWithPrecision() {
     return applyPrecision(rawValue, _precision);
 }
 
-void QDY30A_RS485::setLocalPrecision(Precision precision) {
+void QDY30A_RS485::setLocalPrecision(Precision_QDY30A precision) {
 	this->_precision = precision;
 }
 
 void QDY30A_RS485::setLocalPrecisionFromSetting() {
-	 Precision precision = getPrecision();
+	 Precision_QDY30A precision = getPrecision();
 	 setPrecision(precision);
 }

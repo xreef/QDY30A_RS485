@@ -63,7 +63,7 @@
 #endif
 
 // Define register addresses
-enum RegisterAddress {
+enum RegisterAddress_QDY30A {
     REG_STATUS_ADDRESS = 0x0000,
     REG_STATUS_BAUDRATE,
     REG_STATUS_UNITS,
@@ -74,7 +74,7 @@ enum RegisterAddress {
 };
 
 // Define baud rate settings
-enum BaudRate {
+enum BaudRate_QDY30A {
     BAUD_1200 = 0,
     BAUD_2400,
     BAUD_4800,
@@ -86,7 +86,7 @@ enum BaudRate {
 };
 
 // Define units of measurement
-enum MeasurementUnit {
+enum MeasurementUnit_QDY30A {
     UNIT_NOT_DISPLAYED = 0,
     UNIT_CM,
     UNIT_MM,
@@ -97,7 +97,7 @@ enum MeasurementUnit {
 };
 
 // Define precision settings
-enum Precision {
+enum Precision_QDY30A {
     PRECISION_NO_DECIMAL = 0,
     PRECISION_ONE_DECIMAL,
     PRECISION_TWO_DECIMALS,
@@ -128,17 +128,17 @@ class QDY30A_RS485 {
     String getUnitDescription(uint16_t unitCode);
     String getPrecisionDescription(uint16_t precisionCode);
 
-    String getBaudRateDescription(BaudRate baudRate);
-    String getUnitDescription(MeasurementUnit unit);
-    String getPrecisionDescription(Precision precision);
+    String getBaudRateDescription(BaudRate_QDY30A baudRate);
+    String getUnitDescription(MeasurementUnit_QDY30A unit);
+    String getPrecisionDescription(Precision_QDY30A precision);
 
-    void setBaudRate(BaudRate baudRate);
-    void setMeasurementUnit(MeasurementUnit unit);
-    void setPrecision(Precision precision);
+    void setBaudRate(BaudRate_QDY30A baudRate);
+    void setMeasurementUnit(MeasurementUnit_QDY30A unit);
+    void setPrecision(Precision_QDY30A precision);
 
-    BaudRate getBaudRate();
-    MeasurementUnit getMeasurementUnit();
-    Precision getPrecision();
+    BaudRate_QDY30A getBaudRate();
+    MeasurementUnit_QDY30A getMeasurementUnit();
+    Precision_QDY30A getPrecision();
 
     int16_t getOutputValue();
     int16_t getZeroScaleValue();
@@ -151,7 +151,7 @@ class QDY30A_RS485 {
     uint8_t getSlaveAddress();
 
     void setLocalPrecisionFromSetting();
-    void setLocalPrecision(Precision precision);
+    void setLocalPrecision(Precision_QDY30A precision);
   private:
 	HardwareSerial* hs;
 
@@ -204,15 +204,17 @@ class QDY30A_RS485 {
     void sendRequest(uint8_t *request, uint8_t requestSize);
     bool readResponse(uint8_t *response, uint8_t responseSize);
 
-    float applyPrecision(int16_t rawValue, Precision precision);
+    float applyPrecision(int16_t rawValue, Precision_QDY30A precision);
     int8_t rxMCUPin = -1;
     int8_t txMCUPin = -1;
     int8_t dePin = -1;
 
     uint8_t address = 0x01;
 
-    Precision _precision = PRECISION_ONE_DECIMAL;
+    Precision_QDY30A _precision = PRECISION_ONE_DECIMAL;
 
+    void managedDelay(unsigned long timeout);
+    void writeHex(int n);
 };
 
 #endif
