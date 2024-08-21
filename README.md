@@ -1,6 +1,10 @@
 # QDY30A_RS485
 
+Full information, wiring diagram and code to [mischianti.org](mischianti.org)
+
 The QDY30A_RS485 library provides a seamless interface for communicating with the QDY30A level transmitter over an RS485 connection using the Modbus RTU protocol. Designed for ease of use and flexibility, this library is compatible with a wide range of microcontrollers including Arduino, STM32, ESP8266, ESP32, and Raspberry Pi Pico, making it a versatile choice for projects requiring precise fluid level measurement.
+
+![Water_Level_Sensor_QDY30A_RS486.jpg](resources%2FWater_Level_Sensor_QDY30A_RS486.jpg)
 
 ## Features
 
@@ -9,6 +13,10 @@ The QDY30A_RS485 library provides a seamless interface for communicating with th
 - **Write Functionality**: Modify device settings in real-time to adapt to changing requirements.
 - **Broad Compatibility**: Works with Arduino, STM32, ESP8266, ESP32, and Raspberry Pi Pico platforms.
 - **Error Handling**: Built-in error handling for robust and reliable operation.
+
+## Changelog
+
+2024-08-19: v1.0.0 Fist commit of production library
 
 ## Installation
 
