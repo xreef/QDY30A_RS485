@@ -23,7 +23,7 @@ QDY30A_RS485 qdy30a(RXD1, TXD1, &Serial1, DE_RE);
 
 // Variables to store the measurement unit and precision
 String unitDescription;
-Precision precision;
+Precision_QDY30A precision;
 
 void displayReadings() {
   // Read the fluid level with precision applied
@@ -44,7 +44,7 @@ void setup() {
   qdy30a.begin(); // Initialize the Modbus device
 
   // Read current measurement unit and precision from the device
-  MeasurementUnit unit = qdy30a.getMeasurementUnit();
+  MeasurementUnit_QDY30A unit = qdy30a.getMeasurementUnit();
   precision = qdy30a.getPrecision();
 
   // Obtain and store the unit description for display purposes

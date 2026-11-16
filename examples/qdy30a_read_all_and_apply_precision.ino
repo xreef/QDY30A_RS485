@@ -21,7 +21,7 @@
 QDY30A_RS485 qdy30a(RXD1, TXD1, &Serial1, DE_RE);
 
 // Variables to hold precision and unit description
-Precision precision;
+Precision_QDY30A precision;
 String unitDescription;
 
 void setup() {
@@ -40,8 +40,8 @@ void setup() {
   //qdy30a.setPrecision(PRECISION_ONE_DECIMAL);
 
   // Reading device configurations
-  BaudRate baudRate = qdy30a.getBaudRate();
-  MeasurementUnit unit = qdy30a.getMeasurementUnit();
+  BaudRate_QDY30A baudRate = qdy30a.getBaudRate();
+  MeasurementUnit_QDY30A unit = qdy30a.getMeasurementUnit();
   precision = qdy30a.getPrecision();
 
   // Getting and displaying the current slave address
