@@ -36,6 +36,10 @@
 #ifndef QDY30A_RS485_h
 #define QDY30A_RS485_h
 
+// #define QDY30AB
+#define QDY30A
+
+
 #include "Arduino.h"
 #if !defined(ARDUINO_ARCH_STM32) && !defined(ESP32) && !defined(ARDUINO_ARCH_SAMD) && !defined(ARDUINO_ARCH_MBED) && !defined(__STM32F1__) && !defined(__STM32F4__)
 	#define ACTIVATE_SOFTWARE_SERIAL
@@ -62,6 +66,10 @@
 	#define DEBUG_PRINTLN(...) {}
 #endif
 
+#ifndef QDY30AB
+	#define ADD_DELAY_AFTER_SEND_REQUEST
+#endif
+
 // Define register addresses
 enum RegisterAddress_QDY30A {
     REG_STATUS_ADDRESS = 0x0000,
@@ -85,6 +93,8 @@ enum BaudRate_QDY30A {
     BAUD_115200
 };
 
+#ifndef QDY30AB
+
 // Define units of measurement
 enum MeasurementUnit_QDY30A {
     UNIT_NOT_DISPLAYED = 0,
@@ -95,6 +105,39 @@ enum MeasurementUnit_QDY30A {
     UNIT_KPA,
     UNIT_MA
 };
+#endif
+
+#ifdef QDY30AB
+
+// Define units of measurement
+enum MeasurementUnit_QDY30A {
+//    UNIT_MPA      = 0,   // Megapascal
+	UNIT_NOT_DISPLAYED      = 0,   // Megapascal
+    UNIT_KPA      = 1,   // Kilopascal
+    UNIT_PA       = 2,   // Pascal
+    UNIT_BAR      = 3,   // Bar
+    UNIT_MBAR     = 4,   // Millibar
+    UNIT_KGCM2    = 5,   // Kilogram-force per cm²
+    UNIT_PSI      = 6,   // Pounds per square inch
+    UNIT_MH2O     = 7,   // Meter of water column
+    UNIT_MMH2O    = 8,   // Millimeter of water column
+    UNIT_INH2O    = 9,   // Inch of water column
+    UNIT_H2O      = 10,  // Water column (generic)
+    UNIT_MHG      = 11,  // Meter of mercury column
+    UNIT_MMHG     = 12,  // Millimeter of mercury column
+    UNIT_INHG     = 13,  // Inch of mercury column
+    UNIT_ATM      = 14,  // Standard atmosphere
+    UNIT_TORR     = 15,  // Torr
+    UNIT_M        = 16,  // Meter
+    UNIT_CM       = 17,  // Centimeter
+    UNIT_MM       = 18,  // Millimeter
+    UNIT_KG       = 19,  // Kilogram
+    UNIT_DEG_C    = 20,  // Degree Celsius
+    UNIT_PH       = 21,  // pH
+    UNIT_DEG_F    = 22,  // Degree Fahrenheit
+    UNIT_EMPTY    = 23   // Not displayed / empty
+};
+#endif
 
 // Define precision settings
 enum Precision_QDY30A {
@@ -152,6 +195,14 @@ class QDY30A_RS485 {
 
     void setLocalPrecisionFromSetting();
     void setLocalPrecision(Precision_QDY30A precision);
+
+    String getDeviceType() {
+#ifdef QDY30AB
+        return "QDY30A-B";
+#else
+        return "QDY30A";
+#endif
+    }
   private:
 	HardwareSerial* hs;
 

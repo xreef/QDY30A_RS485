@@ -160,26 +160,34 @@ void QDY30A_RS485::sendRequest(uint8_t *request, uint8_t requestSize) {
     request[requestSize - 2] = crc & 0xFF;
     request[requestSize - 1] = (crc >> 8) & 0xFF;
     // Send request through serial
-    for (int i = 0 ; i <= 7 ; i++) {
-      DEBUG_PRINT("[");
-      DEBUG_PRINT(i);
-      DEBUG_PRINT("]");
-      DEBUG_PRINT("=");
-      writeHex(request[i]);
-      DEBUG_PRINT(" ");
+    for (int i = 0 ; i < requestSize ; i++) {
+    	this->serialDef.stream->write(request[i]);
+		DEBUG_PRINT("[");
+		DEBUG_PRINT(i);
+		DEBUG_PRINT("]");
+		DEBUG_PRINT("=");
+		writeHex(request[i]);
+		DEBUG_PRINT(" ");
     }
     DEBUG_PRINTLN();
 
-    for (uint8_t i = 0; i < requestSize; i++) {
-        this->serialDef.stream->write(request[i]);
-    }
+
+//    for (uint8_t i = 0; i < requestSize; i++) {
+//        this->serialDef.stream->write(request[i]);
+//    }
     this->serialDef.stream->flush(); // Ensure data is transmitted
 
+#ifdef ADD_DELAY_AFTER_SEND_REQUEST
     managedDelay(5);
+#endif
 }
 
 // Reads and validates a Modbus RTU response frame
 bool QDY30A_RS485::readResponse(uint8_t *response, uint8_t responseSize) {
+//    if (this->serialDef.stream->available()) {
+//		this->serialDef.stream->read();
+//	}
+
 	digitalWrite(dePin, DE_RE_READ);
 
     unsigned long startTime = millis();
@@ -290,8 +298,9 @@ String QDY30A_RS485::getErrorDescription(uint8_t errorCode) {
     }
 }
 
+#ifndef QDY30AB
 // Translate unit codes to descriptions
-String QDY30A_RS485::getUnitDescription(uint16_t unitCode) {
+String QDY30A_RS485::getUnitDescription(MeasurementUnit_QDY30A unitCode) {
     switch (unitCode) {
         case 0:
             return "Not displayed";
@@ -312,23 +321,58 @@ String QDY30A_RS485::getUnitDescription(uint16_t unitCode) {
             return "Unknown unit";
     }
 }
+#endif
 
-// Translate precision codes to descriptions
-String QDY30A_RS485::getPrecisionDescription(uint16_t precisionCode) {
-    switch (precisionCode) {
-        case 0:
-            return "No decimal";
-        case 1:
-            return "One decimal place";
-        case 2:
-            return "Two decimal places";
-        case 3:
-            return "Three decimal places";
-        // Adjust based on the protocol specification if there are more precision formats
-        default:
-            return "Unknown precision";
+#ifdef QDY30AB
+// Translate unit codes to descriptions
+String QDY30A_RS485::getUnitDescription(MeasurementUnit_QDY30A unitCode) {
+    switch (unitCode) {
+    	case UNIT_NOT_DISPLAYED:       return "Not displayed";
+//    	case UNIT_MPA:       return "MPa";
+        case UNIT_KPA:       return "kPa";
+        case UNIT_PA:        return "Pa";
+        case UNIT_BAR:       return "bar";
+        case UNIT_MBAR:      return "mbar";
+        case UNIT_KGCM2:     return "kg·cm²⁻¹";
+        case UNIT_PSI:       return "PSI";
+        case UNIT_MH2O:      return "mH₂O";
+        case UNIT_MMH2O:     return "mmH₂O";
+        case UNIT_INH2O:     return "inH₂O";
+        case UNIT_H2O:       return "H₂O";
+        case UNIT_MHG:       return "mHg";
+        case UNIT_MMHG:      return "mmHg";
+        case UNIT_INHG:      return "inHg";
+        case UNIT_ATM:       return "atm";
+        case UNIT_TORR:      return "Torr";
+        case UNIT_M:         return "m";
+        case UNIT_CM:        return "cm";
+        case UNIT_MM:        return "mm";
+        case UNIT_KG:        return "kg";
+        case UNIT_DEG_C:     return "℃";
+        case UNIT_PH:        return "pH";
+        case UNIT_DEG_F:     return "℉";
+        case UNIT_EMPTY:     return "Not displayed";
+        default:             return "Unknown unit";
     }
 }
+
+#endif
+//// Translate precision codes to descriptions
+//String QDY30A_RS485::getPrecisionDescription(uint16_t precisionCode) {
+//    switch (precisionCode) {
+//        case 0:
+//            return "No decimal";
+//        case 1:
+//            return "One decimal place";
+//        case 2:
+//            return "Two decimal places";
+//        case 3:
+//            return "Three decimal places";
+//        // Adjust based on the protocol specification if there are more precision formats
+//        default:
+//            return "Unknown precision";
+//    }
+//}
 void QDY30A_RS485::setSlaveAddress(uint8_t newAddress) {
     // Ensure the new address is within a valid range if necessary
     // Example: if (newAddress >= 1 && newAddress <= 247)
@@ -360,26 +404,6 @@ MeasurementUnit_QDY30A QDY30A_RS485::getMeasurementUnit() {
 Precision_QDY30A QDY30A_RS485::getPrecision() {
     uint16_t precisionValue = readRegister(REG_STATUS_PRECISION);
     return static_cast<Precision_QDY30A>(precisionValue);
-}
-String QDY30A_RS485::getUnitDescription(MeasurementUnit_QDY30A unit) {
-    switch (unit) {
-        case UNIT_NOT_DISPLAYED:
-            return "Not displayed";
-        case UNIT_CM:
-            return "cm";
-        case UNIT_MM:
-            return "mm";
-        case UNIT_MPA:
-            return "MPa";
-        case UNIT_PA:
-            return "Pa";
-        case UNIT_KPA:
-            return "kPa";
-        case UNIT_MA:
-            return "mA";
-        default:
-            return "Unknown unit";
-    }
 }
 String QDY30A_RS485::getPrecisionDescription(Precision_QDY30A precision) {
     switch (precision) {

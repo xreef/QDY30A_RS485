@@ -1,6 +1,6 @@
 {
   "name": "QDY30A_RS485",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "keywords": "RS485, Modbus, RTU, level transmitter, QDY30A, Arduino, STM32, ESP8266, ESP32, Raspberry Pi Pico, fluid measurement, industrial",
   "description": "QDY30A_RS485 is a library designed for fluid level measurement using the QDY30A level transmitter over RS485 with Modbus RTU protocol. Compatible with Arduino, STM32, ESP8266, ESP32, and Raspberry Pi Pico platforms.",
   "homepage": "https://github.com/yourusername/QDY30A_RS485",
